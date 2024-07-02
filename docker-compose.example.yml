@@ -1,0 +1,30 @@
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: always
+    ports:
+      - 443:443
+      - 80:80
+    networks:
+      - traefik-network
+    environment:
+      TZ: Asia/Tokyo
+    labels:
+      traefik.enable: true
+      traefik.http.routers.dashboard.rule: Host(`xxx.yyy.zzz`)
+      traefik.http.routers.dashboard.entrypoints: websecure
+      traefik.http.routers.dashboard.service: api@internal
+      traefik.http.routers.dashboard.tls.certresolver: myresolver
+
+      traefik.http.routers.dashboard.middlewares: auth
+      traefik.http.middlewares.auth.basicauth.users: traefik:$$apr1$$a47tjolc$$ORXnihWt3/xC3wLWFfCWb.
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+
+networks:
+  traefik-network:
+    external: true

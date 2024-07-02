@@ -1,0 +1,25 @@
+log:
+  # level: DEBUG
+
+entryPoints:
+  web:
+    address: :80
+  websecure:
+    address: :443
+
+api:
+  dashboard: true
+
+providers:
+  docker:
+    exposedByDefault: false
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: aaa@bbb
+      storage: /acme.json
+      caServer: https://acme-v02.api.letsencrypt.org/directory
+      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      httpChallenge:
+        entryPoint: web
