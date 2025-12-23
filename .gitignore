@@ -1,3 +1,15 @@
-letsencrypt
+# 環境変数（認証情報を含む）
+.env
+
+# Let's Encrypt証明書
+letsencrypt/
+
+# ログファイル
+logs/
+
+# Traefikプラグイン（ダウンロードされる）
+plugins-local/
+
+# 本番用設定ファイル（exampleを使用）
 docker-compose.yml
 traefik.yml

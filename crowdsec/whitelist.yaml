@@ -1,0 +1,6 @@
+name: custom/whitelist
+description: "Whitelist trusted IPs"
+whitelist:
+  reason: "trusted IPs"
+  ip:
+    - "163.220.178.120"  # NII

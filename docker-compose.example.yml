@@ -1,8 +1,10 @@
 services:
   traefik:
-    image: traefik:latest
+    image: traefik:v2.11
     container_name: traefik
     restart: always
+    depends_on:
+      - crowdsec
     ports:
       - 443:443
       - 80:80
@@ -12,18 +14,41 @@ services:
       TZ: Asia/Tokyo
     labels:
       traefik.enable: true
-      traefik.http.routers.dashboard.rule: Host(`xxx.yyy.zzz`)
-      traefik.http.routers.dashboard.entrypoints: websecure
-      traefik.http.routers.dashboard.tls.certresolver: myresolver
 
-      traefik.http.routers.dashboard.middlewares: auth
-      traefik.http.middlewares.auth.basicauth.users: traefik:$$apr1$$a47tjolc$$ORXnihWt3/xC3wLWFfCWb.
+      # Crowdsec Bouncer middleware (global)
+      traefik.http.middlewares.crowdsec.plugin.bouncer.enabled: true
+      traefik.http.middlewares.crowdsec.plugin.bouncer.crowdsecLapiKey: ${CROWDSEC_BOUNCER_KEY}
+      traefik.http.middlewares.crowdsec.plugin.bouncer.crowdsecLapiHost: crowdsec:8080
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./plugins-local:/plugins-local:ro
+      - ./logs:/var/log/traefik
+
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    restart: always
+    environment:
+      TZ: Asia/Tokyo
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/base-http-scenarios"
+      GID: "1000"
+    volumes:
+      - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
+      - ./crowdsec/whitelist.yaml:/etc/crowdsec/parsers/s02-enrich/custom-whitelist.yaml:ro
+      - crowdsec-db:/var/lib/crowdsec/data/
+      - crowdsec-config:/etc/crowdsec/
+      - ./logs:/var/log/traefik:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik-network
 
 networks:
   traefik-network:
     external: true
+
+volumes:
+  crowdsec-db:
+  crowdsec-config:
