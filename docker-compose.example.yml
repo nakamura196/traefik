@@ -36,10 +36,10 @@ services:
       COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/base-http-scenarios"
       GID: "1000"
     volumes:
-      - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
-      - ./crowdsec/whitelist.yaml:/etc/crowdsec/parsers/s02-enrich/custom-whitelist.yaml:ro
       - crowdsec-db:/var/lib/crowdsec/data/
       - crowdsec-config:/etc/crowdsec/
+      - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
+      - ./crowdsec/parsers:/etc/crowdsec/parsers/s02-enrich/custom:ro
       - ./logs:/var/log/traefik:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
