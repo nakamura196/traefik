@@ -13,3 +13,6 @@ plugins-local/
 # 本番用設定ファイル（exampleを使用）
 docker-compose.yml
 traefik.yml
+
+# CrowdSecホワイトリスト（IPアドレスを含む）
+crowdsec/parsers/whitelist.yaml

@@ -1,0 +1,6 @@
+name: custom/whitelist
+description: "Whitelist trusted IPs"
+whitelist:
+  reason: "trusted IPs"
+  ip:
+    - "xxx.xxx.xxx.xxx"  # Example: your trusted IP
