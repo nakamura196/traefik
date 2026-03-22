@@ -34,6 +34,8 @@ services:
     environment:
       TZ: Asia/Tokyo
       COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/base-http-scenarios"
+      # Disable overly aggressive scenarios that may ban normal users
+      DISABLE_SCENARIOS: "crowdsecurity/http-crawl-non_statics crowdsecurity/http-probing"
       GID: "1000"
     volumes:
       - crowdsec-db:/var/lib/crowdsec/data/
