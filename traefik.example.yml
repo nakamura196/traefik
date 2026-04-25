@@ -13,8 +13,12 @@ entryPoints:
         entryPoint:
           to: websecure
           scheme: https
+          permanent: true
   websecure:
     address: :443
+    http:
+      middlewares:
+        - hsts@file
 
 api:
   dashboard: false
@@ -22,6 +26,9 @@ api:
 providers:
   docker:
     exposedByDefault: false
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
 
 certificatesResolvers:
   myresolver:

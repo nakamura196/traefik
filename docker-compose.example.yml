@@ -24,6 +24,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./dynamic:/etc/traefik/dynamic:ro
       - ./plugins-local:/plugins-local:ro
       - ./logs:/var/log/traefik
 
